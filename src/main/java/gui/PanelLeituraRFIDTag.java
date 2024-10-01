@@ -1,20 +1,31 @@
 package gui;
 
+import models.TagInfo;
+import network.HttpClientESP;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
+
 
 public class PanelLeituraRFIDTag extends JPanel {
 
-    private List<String> listaUids = List.of("uid1", "uid2", "uid3");
+    private HttpClientESP httpClient;
+    private List<String> listaUids = List.of("3912fe7a", "a4c895a9", "a48c57ce");
     private JLabel lblSelecionaUid;
     private JComboBox<String> uidDropdown;
     private JButton btnGetTagInfo;
     private JTextArea txtTagInfo;
     private JScrollPane txtTagInfoScrollPane;
 
-    public PanelLeituraRFIDTag() {
+    public PanelLeituraRFIDTag(HttpClientESP httpClient) {
 
+        this.httpClient = httpClient;
+
+        setBackground(Color.lightGray);
+        setPreferredSize(new Dimension(300, 300));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));  // Organiza os componentes em 3 linhas
 
         // label para dropdown das UIDs
@@ -30,6 +41,22 @@ public class PanelLeituraRFIDTag extends JPanel {
         btnGetTagInfo = new JButton("Obter Informações da Tag");
         btnGetTagInfo.setSize(new Dimension(100, 30));
         btnGetTagInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        btnGetTagInfo.addActionListener(e -> {
+                try {
+
+                    String uidSelecionado = uidDropdown.getSelectedItem().toString();
+                    TagInfo tagInfo = httpClient.getTagInfo(uidSelecionado);
+
+                    // Escrevendo na TextArea
+                    txtTagInfo.setText(""); // limoa a TextArea
+                    txtTagInfo.append("UID: " + tagInfo.getUid() + "\n");
+                    txtTagInfo.append("Bebida: " + tagInfo.getBebida() + "\n");
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+        });
 
         txtTagInfo = new JTextArea(5, 20);
         txtTagInfo.setEditable(false);
