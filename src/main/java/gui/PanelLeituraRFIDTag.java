@@ -49,7 +49,7 @@ public class PanelLeituraRFIDTag extends JPanel {
                     TagInfo tagInfo = httpClient.getTagInfo(uidSelecionado);
 
                     // Escrevendo na TextArea
-                    txtTagInfo.setText(""); // limoa a TextArea
+                    txtTagInfo.setText(""); // Limpa a TextArea
                     txtTagInfo.append("UID: " + tagInfo.getUid() + "\n");
                     txtTagInfo.append("Bebida: " + tagInfo.getBebida() + "\n");
 

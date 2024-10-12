@@ -12,7 +12,7 @@ public class MainApp {
         // Definir que o Swing usará a thread de eventos
         SwingUtilities.invokeLater(() -> {
 
-            HttpClientESP httpClient = new HttpClientESP("http://192.168.18.160/");
+            HttpClientESP httpClient = new HttpClientESP("http://192.168.18.160/"); // Como é criado o IP?
 
             TelaPrincipal tela = new TelaPrincipal(httpClient);
         });

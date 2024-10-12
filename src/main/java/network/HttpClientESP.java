@@ -6,6 +6,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import com.google.gson.Gson;
 import models.TagInfo;
+import java.io.OutputStream;
+//import java.io.UnsupportedEncodingException;
 
 public class HttpClientESP {
 
@@ -16,7 +18,7 @@ public class HttpClientESP {
         this.baseUrl = baseUrl;
     }
 
-    // Método para enviar requisição HTTP GET
+    // Metodo para enviar requisição HTTP GET
     public TagInfo getTagInfo(String tagUid) throws Exception {
         URL url = new URL(baseUrl + "get-tag-info?uid=" + tagUid);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -46,10 +48,40 @@ public class HttpClientESP {
         }
     }
 
-    public void postTagInfo(String uidTag, String bebida) {
+    // Metodo para realizar a requisicao POST passando UID e a bebida
+    public void postTagInfo (String tagUid, String bebida) {
+        HttpURLConnection connection = null;
+        try {
+            URL url = new URL(baseUrl + "post-tag-info?uid=" + tagUid);
+            connection = (HttpURLConnection) url.openConnection();
 
-        // construir a requisição POST com uidTag no endereço
-        // e a bebida no corpo da requisição
+            // Configura a conexão para realizar um POST
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setDoOutput(true);
 
+            // Criação do JSON com a UID e a bebida
+            String jsonInputString = "{\"uid\": \"" + tagUid + "\", \"item\": \"" + bebida + "\"}";
+
+            try (OutputStream os = connection.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
+            int responseCode = connection.getResponseCode();
+            System.out.println("Response Code: " + responseCode);
+
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                throw new Exception("POST request falhou, código: " + responseCode);
+            }
+
+        } catch (Exception e) {
+                e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
     }
 }
