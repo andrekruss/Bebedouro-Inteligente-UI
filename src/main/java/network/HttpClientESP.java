@@ -45,4 +45,11 @@ public class HttpClientESP {
             throw new Exception("GET request falhou, código: " + responseCode);
         }
     }
+
+    public void postTagInfo(String uidTag, String bebida) {
+
+        // construir a requisição POST com uidTag no endereço
+        // e a bebida no corpo da requisição
+
+    }
 }
