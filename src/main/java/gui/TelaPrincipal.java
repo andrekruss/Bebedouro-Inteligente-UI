@@ -10,6 +10,7 @@ public class TelaPrincipal extends JFrame {
     private HttpClientESP httpClient;
     private PanelLeituraRFIDTag panelLeituraRFID;
     private PanelEscritaRFIDTag panelEscritaRFIDTag;
+    private PanelLeituraNivel panelLeituraNivel;
 
     public TelaPrincipal(HttpClientESP httpClient) {
 
@@ -25,6 +26,9 @@ public class TelaPrincipal extends JFrame {
 
         panelEscritaRFIDTag = new PanelEscritaRFIDTag(this.httpClient);
         add(panelEscritaRFIDTag);
+
+        panelLeituraNivel = new PanelLeituraNivel(this.httpClient);
+        add(panelLeituraNivel);
 
         setVisible(true);
     }
