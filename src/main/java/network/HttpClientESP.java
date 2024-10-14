@@ -5,8 +5,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import com.google.gson.Gson;
+import models.StatusTanques;
 import models.TagInfo;
 import java.io.OutputStream;
+import java.rmi.server.ExportException;
 //import java.io.UnsupportedEncodingException;
 
 public class HttpClientESP {
@@ -82,6 +84,32 @@ public class HttpClientESP {
             if (connection != null) {
                 connection.disconnect();
             }
+        }
+    }
+
+    // Metodo para buscar os niveis dos tanques via requisição GET
+    public StatusTanques getNiveisTanques() throws Exception{
+        URL url = new URL(baseUrl + "/get-niveis");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+
+        int responseCode = connection.getResponseCode();
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            // Conversão do JSON recebido para objeto StatusTanques
+            Gson gson = new Gson();
+            return gson.fromJson(response.toString(), StatusTanques.class);
+
+        } else {
+            throw new Exception("Erro na requisição GET: " + responseCode);
         }
     }
 }
