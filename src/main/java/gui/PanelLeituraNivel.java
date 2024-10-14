@@ -11,30 +11,30 @@ import java.awt.event.ActionListener;
 public class PanelLeituraNivel extends JPanel {
 
     private HttpClientESP httpClient;
-    private JLabel tanque1Status;
-    private JLabel tanque2Status;
-    private JLabel tanque3Status;
+    private JLabel lbltanque1Status;
+    private JLabel lbltanque2Status;
+    private JLabel lbltanque3Status;
     private Timer timer;
 
     public PanelLeituraNivel(HttpClientESP httpClient){
-        setLayout(new GridLayout(3, 1, 10, 10));  // Configura layout de 3 linhas e 2 colunas com espaçamento
+        setLayout(new GridLayout(3, 1, 10, 10));  // Configura layout de 3 linhas e 1 colunas com espaçamento
         setPreferredSize(new Dimension(300, 200));
         setBackground(Color.lightGray);
 
-        tanque1Status = new JLabel("Tanque 1: Carregando...");
-        tanque1Status.setHorizontalAlignment(SwingConstants.CENTER);
+        lbltanque1Status = new JLabel("Tanque 1: Carregando...");
+        lbltanque1Status.setHorizontalAlignment(SwingConstants.CENTER);
 
-        tanque2Status = new JLabel("Tanque 2: Carregando...");
-        tanque2Status.setHorizontalAlignment(SwingConstants.CENTER);
+        lbltanque2Status = new JLabel("Tanque 2: Carregando...");
+        lbltanque2Status.setHorizontalAlignment(SwingConstants.CENTER);
 
-        tanque3Status = new JLabel("Tanque 3: Carregando...");
-        tanque3Status.setHorizontalAlignment(SwingConstants.CENTER);
+        lbltanque3Status = new JLabel("Tanque 3: Carregando...");
+        lbltanque3Status.setHorizontalAlignment(SwingConstants.CENTER);
 
         // Adiciona os componentes ao painel
 
-        add(tanque1Status);
-        add(tanque2Status);
-        add(tanque3Status);
+        add(lbltanque1Status);
+        add(lbltanque2Status);
+        add(lbltanque3Status);
 
         // Inicializar e configurar o Timer para atulizar a cada 5seg (5000 ms)
         timer = new Timer(5000, new ActionListener() {
@@ -51,9 +51,9 @@ public class PanelLeituraNivel extends JPanel {
         try {
             StatusTanques status = httpClient.getNiveisTanques();
 
-            tanque1Status.setText("Tanque 1: " + status.getTanque1());
-            tanque2Status.setText("Tanque 2: " + status.getTanque2());
-            tanque3Status.setText("Tanque 3: " + status.getTanque3());
+            lbltanque1Status.setText("Tanque 1: " + status.getTanque1());
+            lbltanque2Status.setText("Tanque 2: " + status.getTanque2());
+            lbltanque3Status.setText("Tanque 3: " + status.getTanque3());
 
         } catch (Exception e) {
             e.printStackTrace();
