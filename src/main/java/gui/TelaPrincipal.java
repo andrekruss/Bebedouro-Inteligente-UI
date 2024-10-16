@@ -17,7 +17,7 @@ public class TelaPrincipal extends JFrame {
 
         this.httpClient = httpClient;
 
-        setTitle("Maquina de Bebida Inteligente GUI");
+        setTitle("Maquina de Bebida Inteligente");
         setSize(800,600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new FlowLayout());
