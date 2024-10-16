@@ -11,12 +11,13 @@ public class TelaPrincipal extends JFrame {
     private PanelLeituraRFIDTag panelLeituraRFID;
     private PanelEscritaRFIDTag panelEscritaRFIDTag;
     private PanelLeituraNivel panelLeituraNivel;
+    private PanelLeituraTemperatura panelLeituraTemperatura;
 
     public TelaPrincipal(HttpClientESP httpClient) {
 
         this.httpClient = httpClient;
 
-        setTitle("Maquina de Bebida Inteligente GUI");
+        setTitle("Maquina de Bebida Inteligente");
         setSize(800,600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new FlowLayout());
@@ -29,6 +30,9 @@ public class TelaPrincipal extends JFrame {
 
         panelLeituraNivel = new PanelLeituraNivel(this.httpClient);
         add(panelLeituraNivel);
+
+        panelLeituraTemperatura = new PanelLeituraTemperatura(this.httpClient);
+        add(panelLeituraTemperatura);
 
         setVisible(true);
     }

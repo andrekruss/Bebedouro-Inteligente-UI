@@ -1,6 +1,6 @@
 package gui;
 
-import models.StatusTanques;
+import models.StatusTemperatura;
 import network.HttpClientESP;
 import javax.swing.*;
 import java.awt.*;
@@ -8,74 +8,72 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 
-
-public class PanelLeituraNivel extends JPanel {
+public class PanelLeituraTemperatura extends JPanel {
 
     private HttpClientESP httpClient;
-    private JLabel lbltanque1Status;
-    private JLabel lbltanque2Status;
-    private JLabel lbltanque3Status;
+    private JLabel lbltemperaturaStatus;
     private Timer timer;
-    private JLabel lblTituloNivel;
+    private JLabel lblTituloTemp;
     private int raioBorda = 30;
 
-    public PanelLeituraNivel(HttpClientESP httpClient){
+    public PanelLeituraTemperatura (HttpClientESP httpClient) {
 
         setOpaque(false);
+        //setLayout(new GridLayout(1, 1, 10, 10));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setPreferredSize(new Dimension(300, 200));
         setBackground(Color.lightGray);
 
         // Label para titulo
-        lblTituloNivel = new JLabel("VERIFICAR NIVEL:");
-        lblTituloNivel.setFont(new Font("Arial", Font.BOLD, 14));
-        lblTituloNivel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lblTituloTemp = new JLabel("VERIFICAR TEMPERATURA:");
+        lblTituloTemp.setFont(new Font("Arial", Font.BOLD, 14));
+        lblTituloTemp.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        lbltanque1Status = new JLabel("TANQUE 1: Carregando...");
-        lbltanque1Status.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        lbltanque2Status = new JLabel("TANQUE 2: Carregando...");
-        lbltanque2Status.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        lbltanque3Status = new JLabel("TANQUE 3: Carregando...");
-        lbltanque3Status.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // Adiciona os componentes ao painel
+        // Label para acompanhar os niveis dos tanques.
+        lbltemperaturaStatus = new JLabel("TEMPERATURA: Carregando...");
+        lbltemperaturaStatus.setFont(new Font("Arial", Font.BOLD, 13));
+        lbltemperaturaStatus.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         add(Box.createVerticalStrut(10));
-        add(lblTituloNivel);
+        add(lblTituloTemp);
         add(Box.createVerticalGlue());
-        add(lbltanque1Status);
-        add(Box.createVerticalStrut(20));
-        add(lbltanque2Status);
-        add(Box.createVerticalStrut(20));
-        add(lbltanque3Status);
+        add(lbltemperaturaStatus);
         add(Box.createVerticalGlue());
 
         // Inicializar e configurar o Timer para atulizar a cada 5seg (5000 ms)
         timer = new Timer(5000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                atualizarStatusTanques();// Atualizar o painel com informações do ESP32
+                atualizarTemperatura();// Atualizar o painel com informações do ESP32
             }
         });
         timer.start();
     }
 
-    // Metodo que atualiza o Label StatusTanques
-    public void atualizarStatusTanques() {
+    //Metodo para atualizar a temperatura
+    public void atualizarTemperatura () {
         try {
-            StatusTanques status = httpClient.getNiveisTanques();
+           double temperatura = httpClient.getTemperatura();
+            lbltemperaturaStatus.setText("TEMPERATURA: " + temperatura + " ºC");
 
-            lbltanque1Status.setText("TANQUE 1: " + status.getTanque1());
-            lbltanque2Status.setText("TANQUE 2: " + status.getTanque2());
-            lbltanque3Status.setText("TANQUE 3: " + status.getTanque3());
+            if (temperatura > 7.0){
+                exibirAlerta();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erro ao atualizar status dos tanques.");
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar status da temperatura.");
         }
     }
+
+    // Metodo que exibe o alerta se a temperatura estiver acima de 7 graus
+    private void exibirAlerta() {
+        JOptionPane.showMessageDialog(this,
+                "Alerta: Temperatura acima do recomendado!",
+                "Alerta de Temperatura",
+                JOptionPane.WARNING_MESSAGE);
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
